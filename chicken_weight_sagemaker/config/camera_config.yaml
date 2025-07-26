@@ -1,0 +1,110 @@
+# Camera Configuration for Chicken Weight Estimation System
+
+# Default Camera Settings
+default_camera:
+  resolution: [1920, 1080]
+  fps: 30
+  format: "MJPG"
+  
+  # Calibration parameters
+  focal_length: 1000.0  # pixels
+  camera_height: 3.0    # meters above ground
+  camera_angle: 45.0    # degrees from horizontal
+  
+  # Lens distortion (if available)
+  distortion_coefficients: [0.0, 0.0, 0.0, 0.0, 0.0]
+  camera_matrix: 
+    - [1000.0, 0.0, 960.0]
+    - [0.0, 1000.0, 540.0] 
+    - [0.0, 0.0, 1.0]
+
+# Farm-specific Camera Configurations
+farm_cameras:
+  barn_camera_01:
+    camera_id: "barn_01"
+    location: "Main Barn - Section A"
+    resolution: [1920, 1080]
+    focal_length: 950.0
+    camera_height: 3.2
+    camera_angle: 40.0
+    
+  barn_camera_02:
+    camera_id: "barn_02" 
+    location: "Main Barn - Section B"
+    resolution: [1920, 1080]
+    focal_length: 980.0
+    camera_height: 3.1
+    camera_angle: 42.0
+    
+  outdoor_camera_01:
+    camera_id: "outdoor_01"
+    location: "Outdoor Run - North"
+    resolution: [1280, 720]
+    focal_length: 800.0
+    camera_height: 2.8
+    camera_angle: 35.0
+
+# Distance Estimation Parameters
+distance_estimation:
+  # Known object dimensions for reference
+  average_chicken_width: 25.0  # cm
+  average_chicken_length: 35.0  # cm
+  
+  # Perspective correction
+  enable_perspective_correction: true
+  ground_plane_detection: true
+  
+  # Validation ranges
+  min_distance: 1.0   # meters
+  max_distance: 10.0  # meters
+  distance_confidence_threshold: 0.6
+
+# Image Processing Settings
+image_processing:
+  # Preprocessing
+  enable_noise_reduction: true
+  enable_contrast_enhancement: true
+  enable_color_correction: false
+  
+  # ROI (Region of Interest) settings
+  enable_roi_filtering: true
+  roi_margin: 0.1  # 10% margin around detected objects
+  
+  # Quality checks
+  min_image_quality: 0.5
+  blur_threshold: 100.0
+  brightness_range: [50, 200]
+
+# Streaming Configuration
+streaming:
+  # Buffer settings
+  frame_buffer_size: 30
+  max_frame_age: 5.0  # seconds
+  
+  # Quality adaptation
+  enable_adaptive_quality: true
+  min_quality: 0.3
+  max_quality: 1.0
+  
+  # Network settings
+  max_bandwidth: 10.0  # Mbps
+  compression_quality: 85
+
+# Calibration Settings
+calibration:
+  # Automatic calibration
+  enable_auto_calibration: true
+  calibration_interval: 3600  # seconds (1 hour)
+  
+  # Reference objects for calibration
+  reference_objects:
+    - name: "feed_bowl"
+      width: 30.0  # cm
+      height: 8.0  # cm
+    - name: "water_dispenser"
+      width: 15.0  # cm
+      height: 25.0  # cm
+  
+  # Calibration validation
+  max_calibration_error: 0.1  # 10% error tolerance
+  min_reference_detections: 5

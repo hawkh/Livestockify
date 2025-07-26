@@ -1,0 +1,105 @@
+# SageMaker Deployment Configuration
+deployment:
+  # Model configuration
+  model:
+    name: "chicken-weight-estimator"
+    framework: "pytorch"
+    framework_version: "2.0.1"
+    python_version: "py310"
+    
+  # Instance configuration
+  instances:
+    type: "ml.g4dn.xlarge"  # GPU instance for inference
+    initial_count: 1
+    min_count: 1
+    max_count: 4
+    
+  # Auto-scaling configuration
+  autoscaling:
+    enabled: true
+    target_invocations_per_instance: 100
+    scale_in_cooldown: 300  # 5 minutes
+    scale_out_cooldown: 60  # 1 minute
+    
+  # Data capture configuration
+  data_capture:
+    enabled: true
+    sampling_percentage: 10
+    capture_modes:
+      - "Input"
+      - "Output"
+    destination_prefix: "chicken-weight-data-capture"
+    
+  # Monitoring configuration
+  monitoring:
+    enabled: true
+    alarms:
+      high_latency:
+        threshold: 5000  # milliseconds
+        evaluation_periods: 2
+        period: 300
+      high_error_rate:
+        threshold: 10  # errors per period
+        evaluation_periods: 1
+        period: 300
+      low_invocations:
+        threshold: 1  # invocations per period
+        evaluation_periods: 1
+        period: 900  # 15 minutes
+        
+  # Environment variables
+  environment:
+    SAGEMAKER_CONTAINER_LOG_LEVEL: "20"
+    PYTHONUNBUFFERED: "TRUE"
+    MODEL_CACHE_SIZE: "100"
+    TRACKING_BUFFER_SIZE: "50"
+    
+# Regional configurations
+regions:
+  us-east-1:
+    availability_zones: ["us-east-1a", "us-east-1b", "us-east-1c"]
+    instance_types: ["ml.g4dn.xlarge", "ml.g4dn.2xlarge"]
+    
+  us-west-2:
+    availability_zones: ["us-west-2a", "us-west-2b", "us-west-2c"]
+    instance_types: ["ml.g4dn.xlarge", "ml.g4dn.2xlarge"]
+    
+  eu-west-1:
+    availability_zones: ["eu-west-1a", "eu-west-1b", "eu-west-1c"]
+    instance_types: ["ml.g4dn.xlarge", "ml.g4dn.2xlarge"]
+
+# Cost optimization
+cost_optimization:
+  spot_instances:
+    enabled: false  # Enable for development/testing
+    max_price: "0.50"  # USD per hour
+    
+  scheduled_scaling:
+    enabled: false
+    schedules:
+      - name: "business_hours"
+        min_capacity: 2
+        max_capacity: 4
+        schedule: "cron(0 8 * * MON-FRI)"  # 8 AM weekdays
+      - name: "off_hours"
+        min_capacity: 1
+        max_capacity: 2
+        schedule: "cron(0 18 * * MON-FRI)"  # 6 PM weekdays
+
+# Security configuration
+security:
+  vpc_config:
+    enabled: false  # Set to true for VPC deployment
+    security_group_ids: []
+    subnets: []
+    
+  encryption:
+    at_rest: true
+    in_transit: true
+    kms_key_id: null  # Use default AWS managed key
+    
+  iam:
+    execution_role_policies:
+      - "arn:aws:iam::aws:policy/AmazonSageMakerFullAccess"
+      - "arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess"
+      - "arn:aws:iam::aws:policy/CloudWatchLogsFullAccess"

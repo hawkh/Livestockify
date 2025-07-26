@@ -1,0 +1,43 @@
+# Camera Configuration Example
+# Copy this file to camera_config.yaml and adjust values for your setup
+
+# Camera intrinsic parameters
+focal_length: 1000.0          # Focal length in pixels
+sensor_width: 6.0             # Sensor width in mm
+sensor_height: 4.5            # Sensor height in mm
+image_width: 1920             # Image width in pixels
+image_height: 1080            # Image height in pixels
+
+# Camera extrinsic parameters
+camera_height: 3.0            # Camera height above ground in meters
+tilt_angle: 0.0               # Camera tilt angle in degrees
+
+# Calibration parameters
+known_object_width: 25.0      # Average adult chicken width in cm
+distance_range_min: 2.0       # Minimum detection distance in meters
+distance_range_max: 10.0      # Maximum detection distance in meters
+
+# Distance estimation parameters
+perspective_correction: true   # Enable perspective correction
+distance_validation: true     # Enable distance validation
+distance_smoothing: true      # Enable distance smoothing
+smoothing_window: 5           # Smoothing window size
+
+# Camera identification
+camera_id: "farm_camera_01"
+camera_name: "Main Poultry Camera"
+calibration_file: null        # Path to calibration file (optional)
+
+# Multiple camera setup example:
+# cameras:
+#   - camera_id: "farm_camera_01"
+#     camera_name: "North Side Camera"
+#     camera_height: 3.5
+#     tilt_angle: -10.0
+#     calibration_file: "calibration/camera_01.yaml"
+#   
+#   - camera_id: "farm_camera_02"
+#     camera_name: "South Side Camera"
+#     camera_height: 3.0
+#     tilt_angle: 0.0
+#     calibration_file: "calibration/camera_02.yaml"

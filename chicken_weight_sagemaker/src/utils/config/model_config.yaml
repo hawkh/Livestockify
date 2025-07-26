@@ -1,0 +1,69 @@
+# Model Configuration for Chicken Weight Estimation System
+
+# Detection Model Configuration
+detection:
+  model_type: "yolo"
+  model_path: "models/yolo_chicken_detector.pt"
+  confidence_threshold: 0.4
+  nms_threshold: 0.5
+  input_size: [640, 640]
+  max_detections: 50
+  
+  # Occlusion handling
+  occlusion_threshold: 0.7
+  temporal_consistency: true
+  consistency_frames: 3
+
+# Weight Estimation Model Configuration  
+weight_estimation:
+  model_type: "distance_adaptive_nn"
+  model_path: "models/weight_estimator.pt"
+  feature_extractor_path: "models/feature_extractor.pt"
+  
+  # Distance compensation
+  enable_distance_compensation: true
+  max_distance: 10.0  # meters
+  min_distance: 1.0   # meters
+  
+  # Age classification
+  enable_age_classification: true
+  age_model_path: "models/age_classifier.pt"
+  
+  # Validation
+  enable_weight_validation: true
+  min_weight: 0.5  # kg
+  max_weight: 5.0  # kg
+
+# Tracking Configuration
+tracking:
+  tracker_type: "deepsort"
+  max_disappeared: 30
+  max_distance: 100.0
+  min_track_length: 5
+  
+  # ReID features
+  reid_model_path: "models/reid_features.pt"
+  feature_dim: 512
+  
+  # Kalman filter
+  process_noise: 0.1
+  measurement_noise: 0.1
+
+# Performance Configuration
+performance:
+  batch_size: 1
+  max_batch_wait_time: 0.05  # seconds
+  enable_gpu: true
+  gpu_memory_fraction: 0.8
+  
+  # Threading
+  max_worker_threads: 4
+  frame_buffer_size: 10
+  result_buffer_size: 50
+
+# Logging Configuration
+logging:
+  level: "INFO"
+  enable_performance_logging: true
+  log_detection_details: false
+  log_weight_estimates: true
